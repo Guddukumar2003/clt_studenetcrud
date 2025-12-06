@@ -105,7 +105,7 @@ const AddUser = () => {
                     />
                 </div>
                 <div className="inputGroup submitGroup">
-                    <button type="submit">Add User</button> {/* Changed to submit; update text for clarity */}
+                    <button type="submit">Add User</button> 
                 </div>
             </form>
         </div>

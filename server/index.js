@@ -10,7 +10,6 @@ app.use(bodyParser.json());
 app.use(cors());
 dotenv.config();
 
-
 const PORT = process.env.PORT || 7000;
 const MONGODB_URI = process.env.MONGODB_URI ;
 
@@ -21,12 +20,8 @@ mongoose.connect(MONGODB_URI)
             console.log(`Server is running on port ${PORT}`);
         });
     })
-
     .catch((error) => {
         console.error('Error connecting to MongoDB:', error);
     });
 
-    app.use("/api",route);
-
-    
-    
+app.use("/api",route);
