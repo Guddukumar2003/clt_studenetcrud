@@ -4,6 +4,12 @@ import axios from "axios"; // Import axios for HTTP requests
 import toast from "react-hot-toast"
 import "./updateuser.css"
 
+// Dynamic API URL: Production uses Render, local uses localhost:7000
+const API_BASE_URL = 
+  process.env.NODE_ENV === 'production' 
+    ? 'https://clt-studenetcrud-1.onrender.com'  // Live backend
+    : 'http://localhost:7000';  // Local dev (fixed port)
+
 const UpdateUser = () => {
     const initialUser = {
         name: "",
@@ -23,12 +29,13 @@ const UpdateUser = () => {
     };
 
     useEffect(() => {
-      axios.get(`http://localhost:8000/api/user/${id}`)
+      axios.get(`${API_BASE_URL}/api/user/${id}`)  // Fixed URL
             .then((response) => {
                 setUser(response.data)
             })
             .catch((error) => {
                 console.log(error);
+                toast.error("Failed to fetch user data", { position: "top-right" });  // Added toast for better UX
             });
     }, [id]);
 
@@ -37,7 +44,7 @@ const UpdateUser = () => {
 
         try {
             // Fixed: Use PUT for update and include ID in URL
-            const response = await axios.put(`http://localhost:8000/api/user/${id}`, user);
+            const response = await axios.put(`${API_BASE_URL}/api/user/${id}`, user);  // Fixed URL
 
             toast.success("User updated successfully", {
                 position: "top-right",

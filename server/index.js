@@ -8,12 +8,11 @@ import dotenv from 'dotenv';
 const app = express();
 app.use(bodyParser.json());
 
-// Configure CORS to explicitly allow your Netlify frontend origin
-// This replaces the generic app.use(cors()); to be more secure and targeted
+// Explicit CORS for your Netlify site (fixes blocks)
 app.use(cors({
-  origin: 'https://cltmernproject.netlify.app',  // Your Netlify frontend URL
-  methods: ['GET', 'POST', 'PUT', 'DELETE'],     // Common methods for CRUD
-  allowedHeaders: ['Content-Type', 'Authorization']  // Common headers
+  origin: 'https://cltmernproject.netlify.app',
+  methods: ['GET', 'POST', 'PUT', 'DELETE'],
+  allowedHeaders: ['Content-Type', 'Authorization']
 }));
 
 dotenv.config();

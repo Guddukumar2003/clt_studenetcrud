@@ -4,13 +4,19 @@ import "./user.css";
 import axios from "axios";
 import toast from 'react-hot-toast';
 
+// Dynamic API URL: Production uses Render, local uses localhost:7000
+const API_BASE_URL = 
+  process.env.NODE_ENV === 'production' 
+    ? 'https://clt-studenetcrud-1.onrender.com'  // Live backend
+    : 'http://localhost:7000';  // Local dev (fixed port)
+
 const User = () => {
     const [users, setUsers] = useState([]);
 
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await axios.get("http://localhost:8000/api/users");
+                const response = await axios.get(`${API_BASE_URL}/api/users`);  // Fixed URL
                 setUsers(response.data);
             } catch (error) {
                 console.log("Error while fetching data", error);
@@ -25,7 +31,7 @@ const User = () => {
             return; // Optional: Add confirmation dialog
         }
 
-        axios.delete(`http://localhost:8000/api/user/${userId}`) // Fixed: Updated URL to match backend route (/api/user/:id)
+        axios.delete(`${API_BASE_URL}/api/user/${userId}`) // Fixed URL
             .then((response) => {
                 // Update state to remove the deleted user
                 setUsers((prevUsers) => prevUsers.filter((user) => user._id !== userId));
