@@ -1,14 +1,14 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from "react-router-dom";
-import axios from "axios"; // Import axios for HTTP requests
-import "./adduser.css"; // Assuming the CSS file is named adduser.css
-import toast from "react-hot-toast"
+import axios from "axios";
+import "./adduser.css";
+import toast from "react-hot-toast";
 
-// Define API base URL dynamically for dev/prod
+// Dynamic API URL: Production uses Render, local uses localhost:7000 (fixed port from 8000)
 const API_BASE_URL = 
   process.env.NODE_ENV === 'production' 
-    ? 'https://clt-studenetcrud-1.onrender.com'  // Your Render backend live URL
-    : 'http://localhost:7000';  // Local dev URL (matches server port)
+    ? 'https://clt-studenetcrud-1.onrender.com'  // Your live Render backend
+    : 'http://localhost:7000';  // Local dev URL
 
 const AddUser = () => {
     const initialUser = {
@@ -18,43 +18,42 @@ const AddUser = () => {
         state: ""
     };
     const [user, setUser] = useState(initialUser);
-    const [loading, setLoading] = useState(false); // Add loading state
+    const [loading, setLoading] = useState(false);
     const navigate = useNavigate();
+    
     const inputHandler = (e) => {
         const { name, value } = e.target;
-        console.log(name, value); // Keep for debugging
+        console.log(name, value);
         setUser({ ...user, [name]: value });
     };
+    
     const submitForm = async (e) => {
         e.preventDefault();
-        // Log the payload before sending (sanity check)
         console.log('Submitting user data:', user);
-        setLoading(true); // Disable form during submit
+        setLoading(true);
         try {
-            const response = await axios.post(`${API_BASE_URL}/api/user`, user);  // Updated URL
-            console.log('Backend response:', response.data); // Log success response
+            const response = await axios.post(`${API_BASE_URL}/api/user`, user);  // Fixed: Dynamic URL
+            console.log('Backend response:', response.data);
             toast.success("Form submitted successfully!", {
                 position: "top-right",
             });
-            // Reset form after success
             setUser(initialUser);
-            // Delay navigation to allow toast to be visible
             setTimeout(() => {
                 navigate("/");
             }, 2000);
         } catch (error) {
-            console.error('Full error object:', error); // Log entire error
-            console.error('Error response data:', error.response?.data); // Backend message
-            console.error('Error status:', error.response?.status); // e.g., 400, 500
-            // Customize toast based on error
+            console.error('Full error object:', error);
+            console.error('Error response data:', error.response?.data);
+            console.error('Error status:', error.response?.status);
             const errorMsg = error.response?.data?.message || error.response?.statusText || "Failed to add user";
             toast.error(errorMsg, {
                 position: "top-right",
             });
         } finally {
-            setLoading(false); // Re-enable form
+            setLoading(false);
         }
     };
+    
     return (
         <div className="addUser">
             <Link to="/" className="btn btn-info">
@@ -73,8 +72,8 @@ const AddUser = () => {
                         autoComplete="off"
                         placeholder="Enter your Full Name"
                         value={user.name}
-                        required // Add validation hint
-                        disabled={loading} // Disable during loading
+                        required
+                        disabled={loading}
                     />
                 </div>
                 <div className="inputGroup">
@@ -128,4 +127,5 @@ const AddUser = () => {
         </div>
     );
 };
+
 export default AddUser;
