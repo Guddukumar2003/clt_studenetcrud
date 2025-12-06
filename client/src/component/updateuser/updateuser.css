@@ -49,9 +49,21 @@
     box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.1);
 }
 
+.inputGroup input.error {
+    border-color: #dc3545; /* Red border for errors */
+    box-shadow: 0 0 0 3px rgba(220, 53, 69, 0.1);
+}
+
 .inputGroup input::placeholder {
     color: #999;
     opacity: 1;
+}
+
+.error-message {
+    color: #dc3545;
+    font-size: 0.85rem;
+    margin-top: 4px;
+    display: block;
 }
 
 .submitGroup {
@@ -71,12 +83,40 @@
     transition: background-color 0.3s ease;
 }
 
-.submitGroup button:hover {
+.submitGroup button:hover:not(:disabled) {
     background-color: #0056b3;
 }
 
-.submitGroup button:active {
+.submitGroup button:active:not(:disabled) {
     transform: translateY(1px); /* Subtle press effect */
+}
+
+.submitGroup button:disabled {
+    background-color: #6c757d;
+    cursor: not-allowed;
+}
+
+/* Back button styling (assuming Bootstrap btn classes, but enhancing) */
+.back-btn {
+    display: inline-block;
+    margin-bottom: 20px;
+    padding: 8px 16px;
+    background-color: #17a2b8;
+    color: white;
+    text-decoration: none;
+    border-radius: 6px;
+    font-weight: 500;
+    transition: background-color 0.3s ease;
+    text-align: center;
+}
+
+.back-btn:hover {
+    background-color: #138496;
+    color: white;
+}
+
+.back-btn i {
+    margin-right: 5px;
 }
 
 /* Responsive adjustments */
@@ -84,6 +124,15 @@
     .addUser {
         margin: 20px;
         padding: 30px 20px;
+    }
+
+    .back-btn {
+        width: 100%;
+        margin-bottom: 15px;
+    }
+
+    .addUser h3 {
+        font-size: 1.3rem;
     }
 }
 

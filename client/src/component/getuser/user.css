@@ -1,31 +1,370 @@
-.userTable{
+.userTable {
     width: 60%;
     margin: 50px auto;
     background-color: white;
     padding: 50px;
     border-radius: 10px;
-    box-shadow: 1px 1px 8px rgba(0,0,0,0.065);
+    box-shadow: 1px 1px 8px rgba(0, 0, 0, 0.065);
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; /* Cleaner font like AddUser */
+}
+
+.userTable h3 {
+    text-align: center;
+    margin-bottom: 30px;
+    color: darkcyan;
+    text-transform: uppercase;
+    text-shadow: 1px 1px 8px rgba(0, 0, 0, 0.065);
+    font-weight: bold;
+    font-size: 2rem; /* Larger font for emphasis */
+    position: relative; /* For pseudo-element */
+    padding-bottom: 10px;
+}
+
+.userTable h3::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 80px;
+    height: 3px;
+    background-color: darkcyan;
+    border-radius: 2px;
+}
+
+/* Search bar styling */
+.search-container {
+    margin-bottom: 30px;
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.search-input {
+    padding: 10px 15px;
+    border: 2px solid #e1e5e9;
+    border-radius: 8px;
+    font-size: 1rem;
+    width: 250px;
+    transition: border-color 0.3s ease;
+}
+
+.search-input:focus {
+    outline: none;
+    border-color: #007bff;
+    box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.1);
+}
+
+.search-input::placeholder {
+    color: #999;
+}
+
+/* Table container */
+.table-container {
+    margin-top: 30px;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
 }
 
 .userTable table {
     width: 100%;
-    margin-top: 30px;
+    border-collapse: collapse; /* Cleaner table */
 }
 
 .userTable table thead th {
     background-color: blueviolet;
+    color: white;
+    padding: 12px 8px; /* Consistent padding */
+    text-align: center;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    position: relative;
+}
+
+.userTable table thead th:hover {
+    background-color: #8a2be2;
+}
+
+.userTable table thead th.sortable::after {
+    content: ' ↕';
+    font-size: 0.8rem;
+    opacity: 0.7;
+}
+
+.userTable table tbody tr {
+    transition: background-color 0.2s ease;
+}
+
+.userTable table tbody tr:hover {
+    background-color: #f8f9fa;
 }
 
 .userTable table tbody td {
-    padding: 10px;
+    padding: 12px 8px; /* Consistent padding */
     text-align: center;
     vertical-align: middle;
+    border-bottom: 1px solid #dee2e6; /* Subtle borders */
 }
 
-.actionButton button{
-    margin: 0 10px;
+.actionButton button {
+    margin: 0 5px; /* Tighter spacing */
+    padding: 6px 12px; /* Smaller buttons for table */
+    font-size: 0.9rem;
+    border-radius: 4px;
+    transition: all 0.3s ease;
 }
+
+.actionButton button:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.actionButton a {
+    margin: 0 5px;
+    padding: 6px 12px;
+    font-size: 0.9rem;
+    text-decoration: none;
+    border-radius: 4px;
+    transition: all 0.3s ease;
+    display: inline-block;
+}
+
+.actionButton a:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+/* Add button styling similar to back-btn in AddUser */
+.add-btn {
+    display: inline-block;
+    margin-bottom: 30px;
+    padding: 12px 24px;
+    background-color: #28a745; /* Green for add action */
+    color: white;
+    text-decoration: none;
+    border-radius: 8px;
+    font-weight: 600;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    text-align: center;
+    width: auto;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    font-size: 1rem;
+}
+
+.add-btn:hover {
+    background-color: #218838;
+    color: white;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+.add-btn i {
+    margin-left: 8px;
+    font-size: 1.1rem;
+}
+
 .noData {
+    margin-top: 40px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 60px 20px;
+    border: 2px dashed #dee2e6;
+    border-radius: 12px;
+    background-color: #f8f9fa;
+    min-height: 200px;
+}
+
+.noData i {
+    font-size: 4rem;
+    color: #6c757d;
+    margin-bottom: 20px;
+    opacity: 0.7;
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0%, 100% { opacity: 0.7; }
+    50% { opacity: 1; }
+}
+
+.noData h3 {
+    color: #495057;
+    margin-bottom: 10px;
+    font-size: 1.5rem;
+    font-weight: 500;
+}
+
+.noData p {
+    color: #6c757d;
+    font-size: 1.1rem;
+    font-style: italic;
+    margin-bottom: 20px;
+}
+
+/* Loading state styling */
+.loading {
+    text-align: center;
+    padding: 60px;
+    font-size: 1.2rem;
+    color: #666;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 200px;
+}
+
+.loading i {
+    font-size: 3rem;
+    color: #007bff;
+    margin-bottom: 15px;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+/* Pagination styling (if added later) */
+.pagination {
+    display: flex;
+    justify-content: center;
     margin-top: 20px;
-    align-items:center ;
+    gap: 5px;
+}
+
+.pagination button {
+    padding: 8px 12px;
+    border: 1px solid #dee2e6;
+    background-color: white;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.pagination button:hover {
+    background-color: #007bff;
+    color: white;
+}
+
+.pagination button.active {
+    background-color: #007bff;
+    color: white;
+    border-color: #007bff;
+}
+
+/* Responsive adjustments - similar to AddUser */
+@media (max-width: 768px) {
+    .userTable {
+        width: 95%;
+        margin: 20px auto;
+        padding: 30px 20px;
+    }
+
+    .userTable h3 {
+        font-size: 1.5rem;
+        margin-bottom: 25px;
+    }
+
+    .userTable h3::after {
+        width: 60px;
+        height: 2px;
+    }
+
+    .search-container {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .search-input {
+        width: 100%;
+        max-width: 300px;
+    }
+
+    .userTable table thead th,
+    .userTable table tbody td {
+        padding: 8px 4px;
+        font-size: 0.9rem;
+    }
+
+    .actionButton button,
+    .actionButton a {
+        margin: 0 2px;
+        padding: 4px 8px;
+        font-size: 0.8rem;
+    }
+
+    .add-btn {
+        width: 100%;
+        margin-bottom: 20px;
+    }
+
+    .noData {
+        margin-top: 20px;
+        padding: 40px 15px;
+    }
+
+    .noData i {
+        font-size: 3rem;
+    }
+
+    .noData h3 {
+        font-size: 1.3rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .userTable {
+        width: 100%;
+        margin: 10px;
+        padding: 20px 15px;
+    }
+
+    .userTable h3 {
+        font-size: 1.3rem;
+        margin-bottom: 20px;
+    }
+
+    .userTable h3::after {
+        width: 50px;
+        height: 2px;
+    }
+
+    .userTable table {
+        font-size: 0.85rem;
+    }
+
+    .userTable table thead th,
+    .userTable table tbody td {
+        padding: 6px 2px;
+    }
+
+    .actionButton {
+        display: flex;
+        flex-direction: column;
+        gap: 5px;
+    }
+
+    .actionButton button,
+    .actionButton a {
+        width: 100%;
+    }
+
+    .noData {
+        padding: 30px 10px;
+        min-height: 150px;
+    }
+}
+
+/* Table responsive wrapper - Bootstrap style */
+.table-responsive {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
 }
