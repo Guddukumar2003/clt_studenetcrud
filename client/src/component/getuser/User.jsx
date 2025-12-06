@@ -40,6 +40,7 @@ const User = () => {
         const filtered = users.filter(user =>
             user.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
             user.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
+            user.phone.toLowerCase().includes(searchTerm.toLowerCase()) ||
             user.state.toLowerCase().includes(searchTerm.toLowerCase())
         );
         setFilteredUsers(filtered);
@@ -54,8 +55,17 @@ const User = () => {
         setSortConfig({ key, direction });
 
         const sorted = [...filteredUsers].sort((a, b) => {
-            if (a[key] < b[key]) return direction === 'asc' ? -1 : 1;
-            if (a[key] > b[key]) return direction === 'asc' ? 1 : -1;
+            let aVal = a[key];
+            let bVal = b[key];
+
+            // Handle numeric sorting for phone if needed
+            if (key === 'phone') {
+                aVal = parseInt(aVal, 10) || 0;
+                bVal = parseInt(bVal, 10) || 0;
+            }
+
+            if (aVal < bVal) return direction === 'asc' ? -1 : 1;
+            if (aVal > bVal) return direction === 'asc' ? 1 : -1;
             return 0;
         });
         setFilteredUsers(sorted);
@@ -66,7 +76,7 @@ const User = () => {
             return; // Optional: Add confirmation dialog
         }
 
-        axios.delete(`${API_BASE_URL}/api/user/${userId}`) // Fixed URL
+        axios.delete(`${API_BASE_URL}/api/user/${userId}`) // Changed back to /api/user/ to match backend route
             .then((response) => {
                 // Update state to remove the deleted user
                 setUsers((prevUsers) => prevUsers.filter((user) => user._id !== userId));
@@ -105,7 +115,7 @@ const User = () => {
                 <input
                     type="text"
                     className="search-input"
-                    placeholder="Search by Name, Email, or State..."
+                    placeholder="Search by Name, Email, Phone, or State..."
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
                 />
@@ -123,6 +133,7 @@ const User = () => {
                         <table className='table table-bordered'>
                             <thead>
                                 <tr>
+                                    <th scope="col">S.No</th> {/* Non-sortable, as it's index-based */}
                                     <th scope="col" onClick={() => handleSort('name')} className={sortConfig.key === 'name' ? 'sortable' : ''}>Name</th>
                                     <th scope="col" onClick={() => handleSort('email')} className={sortConfig.key === 'email' ? 'sortable' : ''}>Email</th>
                                     <th scope="col" onClick={() => handleSort('phone')} className={sortConfig.key === 'phone' ? 'sortable' : ''}>Phone</th>
