@@ -5,18 +5,33 @@ import cors from 'cors';
 import route from './routes/useRoutes.js';
 import dotenv from 'dotenv';
 
+
+dotenv.config();
+
 const app = express();
 app.use(bodyParser.json());
 
-// Explicit CORS for your Netlify site (fixes blocks)
+// ✅ CORS setup: local + live frontend
+const allowedOrigins = [
+  'http://localhost:5173',                  // local frontend
+  'https://cltmernproject.netlify.app'     // live frontend
+];
+
 app.use(cors({
-  origin: 'https://cltmernproject.netlify.app',
+  origin: function(origin, callback) {
+    // allow requests with no origin (like Postman)
+    if (!origin) return callback(null, true);
+    if (allowedOrigins.indexOf(origin) === -1) {
+      const msg = 'The CORS policy for this site does not allow access from the specified Origin.';
+      return callback(new Error(msg), false);
+    }
+    return callback(null, true);
+  },
   methods: ['GET', 'POST', 'PUT', 'DELETE'],
   allowedHeaders: ['Content-Type', 'Authorization']
 }));
 
-dotenv.config();
-
+// MongoDB connection
 const PORT = process.env.PORT || 7000;
 const MONGODB_URI = process.env.MONGODB_URI;
 
@@ -31,4 +46,5 @@ mongoose.connect(MONGODB_URI)
         console.error('Error connecting to MongoDB:', error);
     });
 
+// API routes
 app.use("/api", route);
