@@ -1,0 +1,102 @@
+import React, { useEffect, useState } from 'react';
+import { Link } from "react-router-dom";
+import "./user.css";
+import axios from "axios";
+import toast from 'react-hot-toast';
+
+const User = () => {
+    const [users, setUsers] = useState([]);
+
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const response = await axios.get("http://localhost:8000/api/users");
+                setUsers(response.data);
+            } catch (error) {
+                console.log("Error while fetching data", error);
+                toast.error("Failed to fetch users", { position: "top-right" });
+            }
+        };
+        fetchData();
+    }, []);
+
+    const deleteUser = (userId) => {
+        if (!window.confirm("Are you sure you want to delete this user?")) {
+            return; // Optional: Add confirmation dialog
+        }
+
+        axios.delete(`http://localhost:8000/api/user/${userId}`) // Fixed: Updated URL to match backend route (/api/user/:id)
+            .then((response) => {
+                // Update state to remove the deleted user
+                setUsers((prevUsers) => prevUsers.filter((user) => user._id !== userId));
+                
+                // Show success toast
+                toast.success(response.data.message || "User deleted successfully", { position: "top-right" });
+            })
+            .catch((error) => {
+                console.log(error);
+                toast.error("Failed to delete user", { position: "top-right" }); // Added error toast
+            });
+    };
+
+    return (
+        <div className="userTable">
+            <Link to="/add" className="btn btn-info"> {/* Fixed: class -> className */}
+                Add User
+                <i className="fa-solid fa-user-plus"></i> {/* Fixed: class -> className for icon */}
+            </Link>
+
+            {users.length===0?(
+                <div className="noData">
+                    <h3>No Data to display</h3>
+                    <p>Please add</p>
+                    </div>
+                ):(
+                 <table className='table table-bordered'>
+                <thead>
+                    <tr>
+                        <th scope="col">S.No</th>
+                        <th scope="col">Name</th>
+                        <th scope="col">Email</th>
+                        <th scope="col">Phone</th>
+                        <th scope="col">State</th>
+                        <th scope="col">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {users.map((user, index) => { // Fixed: Added missing comma after index in map callback
+                        return (
+                            <tr key={user._id}> {/* Added key prop for better React performance */}
+                                <td>{index + 1}</td>
+                                <td>{user.name}</td>
+                                <td>{user.email}</td>
+                                <td>{user.phone}</td>
+                                <td>{user.state}</td>
+                                <td className='actionButton'>
+                                    <Link 
+                                        to={`/update/${user._id}`} 
+                                        className="btn btn-warning" // Fixed: class -> className, removed type="button" (not needed for Link)
+                                    >
+                                        <i className="fa-solid fa-pen-to-square"></i> {/* Fixed: class -> className */}
+                                    </Link>
+
+                                    <button 
+                                        onClick={() => deleteUser(user._id)}
+                                        type="button"
+                                        className="btn btn-danger" // Fixed: class -> className
+                                    >
+                                        <i className="fa-solid fa-trash"></i> {/* Fixed: class -> className */}
+                                    </button>
+                                </td>
+                            </tr>
+                        );
+                    })}
+                </tbody>
+            </table>
+              )
+            };
+        </div>
+    );
+};
+
+export default User;

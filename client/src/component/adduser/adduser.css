@@ -1,0 +1,98 @@
+.addUser {
+    background-color: white;
+    width: 100%;
+    max-width: 400px; /* Better responsiveness */
+    margin: 50px auto; /* Center it horizontally */
+    padding: 40px;
+    border-radius: 12px; /* Softer corners */
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1); /* Deeper, more modern shadow */
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; /* Cleaner font */
+}
+
+.addUser h3 {
+    text-align: center;
+    margin-bottom: 30px;
+    color: #333;
+    font-size: 1.5rem;
+    font-weight: 600;
+}
+
+.addUserForm {
+    display: flex;
+    flex-direction: column;
+    gap: 20px; /* Space between form groups */
+}
+
+.inputGroup {
+    display: flex;
+    flex-direction: column;
+    gap: 8px; /* Space between label and input */
+}
+
+.inputGroup label {
+    font-weight: 500;
+    color: #555;
+    font-size: 0.95rem;
+}
+
+.inputGroup input {
+    padding: 12px 16px; /* More padding for comfort */
+    border: 2px solid #e1e5e9; /* Subtle border */
+    border-radius: 8px; /* Rounded inputs */
+    font-size: 1rem;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease; /* Smooth focus */
+}
+
+.inputGroup input:focus {
+    outline: none;
+    border-color: #007bff; /* Blue focus for accessibility */
+    box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.1);
+}
+
+.inputGroup input::placeholder {
+    color: #999;
+    opacity: 1;
+}
+
+.submitGroup {
+    margin-top: 10px; /* Extra space before button */
+}
+
+.submitGroup button {
+    width: 100%;
+    padding: 12px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.submitGroup button:hover {
+    background-color: #0056b3;
+}
+
+.submitGroup button:active {
+    transform: translateY(1px); /* Subtle press effect */
+}
+
+/* Responsive adjustments */
+@media (max-width: 480px) {
+    .addUser {
+        margin: 20px;
+        padding: 30px 20px;
+    }
+}
+
+.addUser h3 {
+    margin-top: 20px;
+    text-align: center;
+    font-weight: bold;
+    /* text-decoration: underline; */
+    color: darkcyan;
+    text-transform: uppercase;
+    text-shadow: 1px 1px 8px rgba(0,0,0,0.065);
+}
