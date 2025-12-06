@@ -7,11 +7,19 @@ import dotenv from 'dotenv';
 
 const app = express();
 app.use(bodyParser.json());
-app.use(cors());
+
+// Configure CORS to explicitly allow your Netlify frontend origin
+// This replaces the generic app.use(cors()); to be more secure and targeted
+app.use(cors({
+  origin: 'https://cltmernproject.netlify.app',  // Your Netlify frontend URL
+  methods: ['GET', 'POST', 'PUT', 'DELETE'],     // Common methods for CRUD
+  allowedHeaders: ['Content-Type', 'Authorization']  // Common headers
+}));
+
 dotenv.config();
 
 const PORT = process.env.PORT || 7000;
-const MONGODB_URI = process.env.MONGODB_URI ;
+const MONGODB_URI = process.env.MONGODB_URI;
 
 mongoose.connect(MONGODB_URI)
     .then(() => {
@@ -24,4 +32,4 @@ mongoose.connect(MONGODB_URI)
         console.error('Error connecting to MongoDB:', error);
     });
 
-app.use("/api",route);
+app.use("/api", route);

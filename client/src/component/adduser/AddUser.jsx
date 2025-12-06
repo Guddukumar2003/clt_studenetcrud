@@ -5,18 +5,19 @@ import "./adduser.css"; // Assuming the CSS file is named adduser.css
 import toast from "react-hot-toast"
 
 const AddUser = () => {
-    const users = {
+    const initialUser = {
         name: "",
         email: "",
         phone: "",
         state: ""
     };
-    const [user, setUser] = useState(users);
+    const [user, setUser] = useState(initialUser);
+    const [loading, setLoading] = useState(false); // Add loading state
     const navigate = useNavigate();
 
     const inputHandler = (e) => {
         const { name, value } = e.target;
-        console.log(name, value);
+        console.log(name, value); // Keep for debugging
 
         setUser({ ...user, [name]: value });
     };
@@ -24,23 +25,38 @@ const AddUser = () => {
     const submitForm = async (e) => {
         e.preventDefault();
 
+        // Log the payload before sending (sanity check)
+        console.log('Submitting user data:', user);
+
+        setLoading(true); // Disable form during submit
+
         try {
             const response = await axios.post("http://localhost:8000/api/user", user);
+            console.log('Backend response:', response.data);  // Log success response
 
-            toast.success("form submit Successfull", {
+            toast.success("Form submitted successfully!", {
                 position: "top-right",
             });
+
+            // Reset form after success
+            setUser(initialUser);
 
             // Delay navigation to allow toast to be visible
             setTimeout(() => {
                 navigate("/");
             }, 2000);
         } catch (error) {
-            console.error(error);
+            console.error('Full error object:', error);  // Log entire error
+            console.error('Error response data:', error.response?.data);  // Backend message
+            console.error('Error status:', error.response?.status);  // e.g., 400, 500
 
-            toast.error("Failed to add user", {
+            // Customize toast based on error
+            const errorMsg = error.response?.data?.message || error.response?.statusText || "Failed to add user";
+            toast.error(errorMsg, {
                 position: "top-right",
             });
+        } finally {
+            setLoading(false); // Re-enable form
         }
     };
 
@@ -63,6 +79,7 @@ const AddUser = () => {
                         placeholder="Enter your Full Name"
                         value={user.name}
                         required // Add validation hint
+                        disabled={loading} // Disable during loading
                     />
                 </div>
                 <div className="inputGroup">
@@ -76,6 +93,7 @@ const AddUser = () => {
                         placeholder="Enter Email"
                         value={user.email}
                         required
+                        disabled={loading}
                     />
                 </div>
                 <div className="inputGroup">
@@ -89,6 +107,7 @@ const AddUser = () => {
                         placeholder="Enter Phone Number"
                         value={user.phone}
                         required
+                        disabled={loading}
                     />
                 </div>
                 <div className="inputGroup">
@@ -102,10 +121,13 @@ const AddUser = () => {
                         placeholder="Enter your State"
                         value={user.state}
                         required
+                        disabled={loading}
                     />
                 </div>
                 <div className="inputGroup submitGroup">
-                    <button type="submit">Add User</button> 
+                    <button type="submit" disabled={loading}>
+                        {loading ? 'Adding...' : 'Add User'}
+                    </button> 
                 </div>
             </form>
         </div>
