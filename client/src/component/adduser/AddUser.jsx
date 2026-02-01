@@ -132,7 +132,7 @@ const AddUser = () => {
                 <i className="fa-solid fa-backward"></i>
                 Back
             </Link>
-            <h3>Add New User</h3>
+            <h3>Add New User Form</h3>
             <form className="addUserForm" onSubmit={submitForm}>
                 <div className="inputGroup">
                     <label htmlFor="name">Name:</label>
