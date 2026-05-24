@@ -94,7 +94,7 @@ const User = () => {
     if (loading) {
         return (
             <div className="userTable">
-                <h3>User List</h3>
+                <h3>all User List </h3>
                 <div className="loading">
                     <i className="fa-solid fa-spinner"></i>
                     <div>Loading users...</div>
